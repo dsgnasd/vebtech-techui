@@ -529,6 +529,34 @@ form[aria-busy="true"] .submission-fields { opacity: .7; }
   .button:active:not(:disabled), .icon-button:active:not(:disabled) { transform: none; }
 }
 .success-card h1 { font-size: 24px; line-height: 32px; margin-top: 12px; }
+/* Packages are the primary choice within the compact questionnaire. */
+.package-grid { gap: 14px; }
+.package-card { padding: 20px; min-height: 196px; border-radius: 16px; background: linear-gradient(160deg, #fff 40%, #f7f9fe); box-shadow: 0 2px 6px #00103d04; }
+.package-choice { min-height: 24px; padding-right: 24px; font-size: 17px; line-height: 24px; }
+.package-choice::after { border-radius: 16px; }
+.package-price { margin: 22px 0 8px; gap: 6px; }
+.package-price strong { font-size: 34px; line-height: 44px; letter-spacing: -.8px; }
+.package-price > span { font-size: 13px; line-height: 20px; }
+.package-subtitle { min-height: 40px; font-size: 14px; line-height: 20px; color: #57595b; }
+.package-card:hover { border-color: #9abaff; box-shadow: 0 4px 14px #235ad10c; }
+.package-card.selected { border-color: #3b79ff; background: linear-gradient(160deg, #f5f8ff, #edf3ff); box-shadow: inset 0 0 0 1px #3b79ff, 0 4px 14px #235ad110; }
+.package-card.selected::before { content: ""; position: absolute; top: 24px; right: 22px; width: 7px; height: 12px; border: solid #235ad1; border-width: 0 2px 2px 0; transform: rotate(45deg); pointer-events: none; }
+.package-card.selected .package-choice, .package-card.selected .package-price strong { color: #235ad1; }
+.package-feature { padding: 12px 0; }
+.package-feature strong, .package-feature small { font-size: 13px; line-height: 20px; }
+@supports (grid-template-rows: subgrid) {
+  @media (min-width: 801px) {
+    .package-grid.comparing { column-gap: 14px; }
+    .comparing .package-subtitle { padding-bottom: 20px; }
+  }
+}
+@media (max-width: 800px) {
+  .package-card { padding: 20px; min-height: 176px; }
+  .package-choice { font-size: 16px; line-height: 24px; }
+  .package-price { margin-top: 16px; }
+  .package-price strong { font-size: 30px; line-height: 40px; }
+  .package-subtitle { min-height: 0; }
+}
 @media (max-width: 600px) {
   .card-heading { margin-bottom: 20px; }
   .applicant { padding: 12px; }
