@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Открытие счёта — БЕЛВЭБ",
+  title: "Открытие счета — БЕЛВЭБ",
   description: "Интерактивный прототип открытия счёта для бизнеса на основе дизайн-системы TechUI.",
   icons: {
     icon: "/favicon.svg",
