@@ -53,7 +53,7 @@ export default function Home() {
 
   return <div className={questionnaire ? "app app-questionnaire" : "app"}>
     <a href="#main" className="skip">{questionnaire ? "Заявление на комплексное обслуживание" : "Открытие счета"}</a>
-    {kind && <div hidden={!questionnaire}><Questionnaire key={kind} active={questionnaire} applicant={{ kind, unp, phone }} back={() => { setQuestionnaire(false); window.scrollTo({ top: 0 }); }}/></div>}
+    {kind && <div hidden={!questionnaire}><Questionnaire key={kind} active={questionnaire} restart={() => { setQuestionnaire(false); setKind(""); setUnp(""); setPhone(""); setConsent(false); setFatca(false); setOwners(""); setErrors({}); window.scrollTo({ top: 0 }); }} applicant={{ kind, unp, phone }} back={() => { setQuestionnaire(false); window.scrollTo({ top: 0 }); }}/></div>}
 
     {!questionnaire && <main id="main" className="layout">
       <img className="form-logo" src="/assets/figma-belweb.svg" alt="БЕЛВЭБ" width="214" height="154"/>
