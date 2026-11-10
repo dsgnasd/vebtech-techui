@@ -76,7 +76,6 @@ export default function Questionnaire({ applicant, back, restart, active = true 
   const fileInput = useRef<HTMLInputElement>(null);
   const form = useRef<HTMLFormElement>(null);
   const top = useRef<HTMLHeadingElement>(null);
-  const errorSummary = useRef<HTMLElement>(null);
   const activityItem = content.activities.find(item => item.code === activity);
   const office = content.offices.find(item => item.id === officeId);
   const packageItem = content.packages.find(item => item.id === selectedPackage);
@@ -94,7 +93,6 @@ export default function Questionnaire({ applicant, back, restart, active = true 
     terms: { id: "section-terms", label: `${copy.at[0]}www.belveb.by):` },
     confirmations: { id: "section-confirmations", label: copy.at[4] },
   };
-  const visibleErrors = Object.entries(errors).filter(([, message]) => !!message);
   function focusSection(id: string) {
     requestAnimationFrame(() => {
       const section = window.document.getElementById(id);
@@ -138,7 +136,7 @@ export default function Questionnaire({ applicant, back, restart, active = true 
     if (!terms) next.terms = "Предоставьте согласие";
     if (!confirmations) next.confirmations = "Подтвердите согласие";
     setErrors(next);
-    if (Object.keys(next).length) { requestAnimationFrame(() => { errorSummary.current?.scrollIntoView({ block: "start", behavior: "smooth" }); errorSummary.current?.focus({ preventScroll: true }); }); return; }
+    if (Object.keys(next).length) { focusSection(sections[Object.keys(next)[0]].id); return; }
     sending.current = true;
     setSubmitting(true);
     requestId.current ||= crypto.randomUUID();
@@ -187,7 +185,6 @@ export default function Questionnaire({ applicant, back, restart, active = true 
     <div className="questionnaire-heading"><button type="button" className="icon-button" disabled={submitting} onClick={back} aria-label="Открытие счета"><ArrowLeft size={22}/></button><h1 ref={top} tabIndex={-1}>Заявление на комплексное обслуживание</h1></div>
     <form ref={form} onSubmit={submit} noValidate aria-busy={submitting}>
       <fieldset className="submission-fields" disabled={submitting}>
-      {visibleErrors.length > 0 && <section className="error-summary" ref={errorSummary} tabIndex={-1} aria-labelledby="error-summary-title"><h2 id="error-summary-title">Проверьте данные <span>{visibleErrors.length}</span></h2><ul>{visibleErrors.map(([key, message]) => <li key={key}><a href={`#${sections[key].id}`} onClick={event => { event.preventDefault(); focusSection(sections[key].id); }}><span>{sections[key].label}</span><strong>{message}</strong></a></li>)}</ul></section>}
       <section className="client-data questionnaire-panel"><div><span>Данные клиента</span><h2>{clientName}</h2><p><span>УНП {applicant.unp}</span><a href={`tel:${applicant.phone.replace(/[^\d+]/g, "")}`}>{applicant.phone}</a><span>Резидент РБ</span></p></div></section>
       {company && <section className="questionnaire-panel company-questions"><div id="section-sole" tabIndex={-1} data-invalid={!!errors.sole}><Question name="sole-founder" label="Руководитель юридического лица является единственным участником" value={sole} onChange={answer => { setSole(answer); clear("sole"); }} error={errors.sole}/></div><div id="section-charter" tabIndex={-1} data-invalid={!!errors.charter}><Question name="standard-charter" label="Юридическое лицо действует на основании типового устава" value={charter} onChange={answer => { setCharter(answer); clear("charter"); }} error={errors.charter}/></div></section>}
       <section id="section-activity" tabIndex={-1} className="questionnaire-panel" data-invalid={!!errors.activity}><div className="field-heading"><h2>Основной вид деятельности</h2><span>Код ОКЭД</span></div><button type="button" className="select-trigger" aria-haspopup="dialog" aria-invalid={!!errors.activity} aria-describedby={errors.activity ? "activity-error" : undefined} onClick={() => setPicker("activity")}><span>{activityItem ? <><b className="code-tag">{activityItem.code}</b>{activityItem.name}</> : "Выберите вид деятельности"}</span><ChevronDown size={18}/></button><ErrorText id="activity-error">{errors.activity}</ErrorText></section>

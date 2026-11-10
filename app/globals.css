@@ -563,6 +563,9 @@ form[aria-busy="true"] .submission-fields { opacity: .7; }
 }
 @media (max-width: 800px) {
   .package-card { padding: 16px; min-height: 164px; }
+  .package-grid.comparing { grid-template-rows: none; gap: 12px; }
+  .comparing .package-card { display: flex; grid-row: auto; }
+  .comparing .package-features { display: block; }
   .package-choice { font-size: var(--solar-body1-size); line-height: var(--solar-body1-line); }
   .package-price { margin-top: 16px; }
   .package-price strong { font-size: var(--solar-h2-size); line-height: var(--solar-h2-line); }
