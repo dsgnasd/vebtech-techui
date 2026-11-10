@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { ArrowLeft, Check, ChevronDown, Clock3, LoaderCircle, Plus, Search, Trash2, Upload, X } from "lucide-react";
+import { ArrowLeft, Check, ChevronDown, LoaderCircle, Plus, Search, Trash2, Upload, X } from "lucide-react";
 import content from "./source-content.json";
 import copy from "./source-copy.json";
 
@@ -64,7 +64,7 @@ export default function Questionnaire({ applicant, back, restart, active = true 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [picker, setPicker] = useState<"activity" | "account" | "office" | null>(null);
   const [document, setDocument] = useState<keyof typeof content.documents | null>(null);
-  const [receipt, setReceipt] = useState<{ reference: string; status: "processing"; receivedAt: string } | null>(null);
+  const [receipt, setReceipt] = useState<{ status: "processing" } | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const sending = useRef(false);
@@ -162,8 +162,8 @@ export default function Questionnaire({ applicant, back, restart, active = true 
         new Promise(resolve => window.setTimeout(resolve, 550)),
       ]);
       const result: unknown = await response.json();
-      if (!response.ok || !result || typeof result !== "object" || !("status" in result) || result.status !== "processing" || !("reference" in result) || typeof result.reference !== "string" || !("receivedAt" in result) || typeof result.receivedAt !== "string") throw new Error("Не удалось отправить заявку");
-      setReceipt({ reference: result.reference, status: "processing", receivedAt: result.receivedAt });
+      if (!response.ok || !result || typeof result !== "object" || !("status" in result) || result.status !== "processing") throw new Error("Не удалось отправить заявку");
+      setReceipt({ status: "processing" });
       scrollTop();
     } catch (error) {
       if (!controller.signal.aborted) setSubmitError("Не удалось отправить заявку");
@@ -179,8 +179,6 @@ export default function Questionnaire({ applicant, back, restart, active = true 
       <div className="processing-status"><span/>В обработке</div>
       <h1 ref={top} tabIndex={-1}>Заявление принято в обработку</h1>
       <p className="success-description">Заявление успешно зарегистрировано!</p>
-      <div className="receipt"><span>Регистрационный номер:</span><strong>{receipt.reference}</strong></div>
-      <div className="processing-line"><Clock3 size={18}/><span>Проверка комплаенс и открытие счетов</span></div>
       <button type="button" className="button secondary" onClick={restart || back}>Новое заявление</button>
     </section>
   </main>;

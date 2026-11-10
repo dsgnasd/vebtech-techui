@@ -40,12 +40,9 @@ export async function POST(request: Request) {
     if (body.length > 128_000) return Response.json({ error: "Не удалось отправить заявку" }, { status: 413 });
     const parsed = application.safeParse(JSON.parse(body));
     if (!parsed.success) return Response.json({ error: "Не удалось отправить заявку" }, { status: 400 });
-    const receivedAt = new Date().toISOString();
     return Response.json({
       mode: "prototype",
-      reference: `БВ-${receivedAt.slice(0, 4)}-${parsed.data.requestId.slice(0, 8).toUpperCase()}`,
       status: "processing",
-      receivedAt,
     }, { status: 202, headers: { "Cache-Control": "no-store" } });
   } catch {
     return Response.json({ error: "Не удалось отправить заявку" }, { status: 400 });
