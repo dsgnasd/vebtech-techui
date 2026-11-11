@@ -343,8 +343,8 @@ h1:focus { outline: none; }
 .review-row dd > .summary-list:first-child { margin-top: 0; }
 @supports (grid-template-rows: subgrid) {
   @media (min-width: 801px) {
-    .package-grid.comparing { grid-template-rows: auto auto auto repeat(8,auto); row-gap: 0; }
-    .comparing .package-card { display: grid; grid-template-rows: subgrid; grid-row: span 11; row-gap: 0; }
+    .package-grid.comparing { grid-template-rows: auto auto auto repeat(8,auto) auto; row-gap: 0; }
+    .comparing .package-card { display: grid; grid-template-rows: subgrid; grid-row: span 12; row-gap: 0; }
     .comparing .package-features { display: contents; }
     .comparing .package-subtitle { padding-bottom: 12px; min-height: 0; }
   }
@@ -656,8 +656,7 @@ form[aria-busy="true"] .submission-fields { opacity: .7; }
 .document-slots > li[data-invalid="true"] h3 { color: var(--error); }
 .document-slots .file-list:empty { display: none; }
 .sla-timer { text-align: right; color: var(--muted); margin: 0 0 16px; font-variant-numeric: tabular-nums; }
-.package-expand, .package-more a { position: relative; z-index: 2; }
-.package-expand { margin: 12px 0 0; font-size: var(--solar-body2-size); }
+.package-more a { position: relative; z-index: 2; }
 .package-more { padding: 12px 0 0; }
 @media (max-width: 600px) {
   .details-grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
@@ -666,10 +665,6 @@ form[aria-busy="true"] .submission-fields { opacity: .7; }
   .person-section-heading { flex-wrap: wrap; }
   .field > select { max-width: 100%; }
 }
-/* Independent disclosure: cards keep their own content height and clear gutters. */
-.package-grid.comparing { grid-template-rows: none; row-gap: 14px; align-items: start; }
-.comparing .package-card { display: flex; flex-direction: column; grid-row: auto; }
-.comparing .package-features { display: block; }
 /* Required uploads: quiet titles, explicit actions, errors only in supporting text. */
 .documents-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .documents-heading h2 { margin: 0; }
