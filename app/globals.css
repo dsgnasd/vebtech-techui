@@ -120,8 +120,8 @@ h1:focus { outline: none; }
 :root { --muted: #57595b; }
 .card-heading > p { font-size: var(--solar-body1-size); line-height: var(--solar-body1-line); margin-top: 10px; }
 .field > label { color: #57595b; margin-bottom: 10px; font-weight: 400; line-height: 18px; }
-.applicant { align-items: flex-start; }
-.applicant-icon, .applicant input { margin-top: 1px; }
+.applicant { align-items: center; }
+.applicant-icon, .applicant input { margin-top: 0; }
 .applicant strong { font-weight: 400; }
 .owners > p { margin-top: 12px; }
 .fatca-help { display: inline-flex; align-items: center; justify-content: center; vertical-align: -4px; width: 20px; height: 20px; margin: 0; border-radius: 4px; }
