@@ -595,17 +595,17 @@ form[aria-busy="true"] .submission-fields { opacity: .7; }
 .signing-document-loading { display: flex; align-items: center; gap: 8px; padding: 20px 16px; color: var(--muted); }
 .signing-action { display: flex; align-items: center; justify-content: center; gap: 8px; width: fit-content; min-width: 224px; margin: 24px auto 0; min-height: 48px; }
 .signing-document-error { display: grid; gap: 8px; margin-top: 12px; justify-items: start; }
-.signing-sms, .signing-checking, .signing-complete { max-width: 624px; }
-.signing-sms .signing-card, .signing-checking .signing-card, .signing-complete .signing-card { text-align: center; }
+.signing-stage-sms, .signing-stage-checking, .signing-stage-complete { max-width: 624px; }
+.signing-stage-sms .signing-card, .signing-stage-checking .signing-card, .signing-stage-complete .signing-card { text-align: center; }
 .signing-sms-form { max-width: 400px; margin: 24px auto 0; }
 .signing-sms-form .field { text-align: left; margin-bottom: 12px; }
 .signing-sms-form input { font-variant-numeric: tabular-nums; }
 .signing-resend { min-height: 40px; line-height: 20px; font-variant-numeric: tabular-nums; }
 .signing-resend:disabled { color: #a2a6b8; cursor: default; }
 .signing-sms-form .signing-action { margin-top: 16px; }
-.signing-checking, .signing-complete { margin-top: clamp(24px, 9vh, 96px); }
+.signing-stage-checking, .signing-stage-complete { margin-top: clamp(24px, 9vh, 96px); }
 .signing-success-mark { display: grid; place-items: center; margin: 0 auto 24px; width: 64px; height: 64px; border-radius: 50%; background: #00ba3433; color: #00952a; }
-.signing-checking .signing-checking { margin: 24px auto 0; color: var(--primary); }
+.signing-stage-checking .signing-checking { margin: 24px auto 0; color: var(--primary); }
 .signing-bank-link { text-decoration: none; }
 .signing-preview { width: min(960px, calc(100vw - 32px)); max-width: 960px; }
 .signing-preview .modal-title h2 { overflow-wrap: anywhere; }
@@ -620,7 +620,7 @@ form[aria-busy="true"] .submission-fields { opacity: .7; }
   .signing-back { margin-bottom: 12px; }
   .signing-document { gap: 8px; padding: 10px 12px; }
   .signing-action { width: 100%; min-width: 0; }
-  .signing-sms .signing-card { text-align: left; }
+  .signing-stage-sms .signing-card { text-align: left; }
   .signing-resend { display: block; text-align: center; width: 100%; }
   .signing-preview { padding: 16px; }
 }

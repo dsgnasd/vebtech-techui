@@ -74,7 +74,7 @@ export default function SigningFlow({ files, applicationLines, back }: Props) {
     }, 650);
   }
   const time = `${String(Math.floor(remaining / 60)).padStart(2,"0")}:${String(remaining % 60).padStart(2,"0")}`;
-  return <main id="main" className={`signing-flow signing-${stage}`}>
+  return <main id="main" className={`signing-flow signing-stage-${stage}`}>
     {(stage === "documents" || stage === "sms") && <button className="text-button signing-back" type="button" disabled={verifying} onClick={() => stage === "documents" ? back() : setStage("documents")}><ArrowLeft size={18}/>Назад</button>}
     <section className="signing-card" aria-busy={verifying || stage === "checking"}>
       {(stage === "checking" || stage === "complete") && <div className="signing-success-mark"><Check size={32}/></div>}
