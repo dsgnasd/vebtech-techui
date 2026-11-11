@@ -1,0 +1,75 @@
+"use client";
+
+import { useId, useState } from "react";
+import { Plus, Trash2 } from "./solar-icons";
+import { countries, emptyPerson, identityDocuments, settlements, type Address, type Answer, type Details, type Person } from "./application-model";
+
+type Errors = Record<string, string>;
+function Field({ label, path, value, change, errors, maxLength, readOnly = false, numeric = false, placeholder }: { label: string; path: string; value: string; change?: (value: string) => void; errors: Errors; maxLength?: number; readOnly?: boolean; numeric?: boolean; placeholder?: string }) {
+  return <div className="field"><label htmlFor={path}>{label}</label><input id={path} value={value} maxLength={maxLength} readOnly={readOnly} inputMode={numeric ? "numeric" : undefined} placeholder={placeholder || (readOnly ? "—" : "Введите данные")} onChange={e => change?.(numeric ? e.target.value.replace(/\D/g, "") : e.target.value)} aria-invalid={!!errors[path]} aria-describedby={errors[path] ? `${path}-error` : undefined}/>{errors[path] && <p className="error" id={`${path}-error`}>{errors[path]}</p>}</div>;
+}
+function SelectField({ label, path, value, change, errors, items, searchable = false }: { label: string; path: string; value: string; change: (value: string) => void; errors: Errors; items: { code: string; name: string }[]; searchable?: boolean }) {
+  const [draft, setDraft] = useState<string | null>(null);
+  const listId = useId();
+  const keyboardMap = (text: string) => text.replace(/[a-z\[\];',.]/gi, c => { const at = "qwertyuiop[]asdfghjkl;'zxcvbnm,.".indexOf(c.toLowerCase()); return at < 0 ? c : "йцукенгшщзхъфывапролджэячсмитьбю"[at]; });
+  return <div className="field"><label htmlFor={path}>{label}</label>{searchable ? <><input id={path} list={listId} value={draft ?? items.find(item => item.code === value)?.name ?? ""} placeholder="Введите данные" autoComplete="off" onChange={e => { const text = keyboardMap(e.target.value); setDraft(text); change(items.find(item => item.name.toLocaleLowerCase() === text.toLocaleLowerCase())?.code || ""); }} onBlur={() => { if (value) setDraft(null); }} aria-invalid={!!errors[path]} aria-describedby={errors[path] ? `${path}-error` : undefined}/><datalist id={listId}>{items.map(item => <option key={item.code} value={item.name}/>)}</datalist></> : <select id={path} value={value} onChange={e => change(e.target.value)} aria-invalid={!!errors[path]} aria-describedby={errors[path] ? `${path}-error` : undefined}><option value="">Выберите значение</option>{items.map(item => <option key={item.code} value={item.code}>{item.name}</option>)}</select>}{errors[path] && <p className="error" id={`${path}-error`}>{errors[path]}</p>}</div>;
+}
+export function YesNo({ label, path, value, change, errors }: { label: string; path: string; value: Answer; change: (value: Answer) => void; errors: Errors }) {
+  return <fieldset className="question detail-question" id={path} tabIndex={-1} aria-invalid={!!errors[path]} aria-describedby={errors[path] ? `${path}-error` : undefined}><legend>{label}</legend><div className="inline-radios">{(["yes", "no"] as const).map(answer => <label key={answer}><input type="radio" name={path} value={answer} checked={value === answer} onChange={() => change(answer)}/>{answer === "yes" ? "Да" : "Нет"}</label>)}</div>{errors[path] && <p className="error" id={`${path}-error`}>{errors[path]}</p>}</fieldset>;
+}
+function PersonFields({ value, change, path, errors, shares = false, relatedLabel, relatedSwitch = false }: { value: Person; change: (person: Person) => void; path: string; errors: Errors; shares?: boolean; relatedLabel?: string; relatedSwitch?: boolean }) {
+  const set = (key: keyof Person, val: string | boolean) => change({ ...value, [key]: val });
+  return <>
+    <div className="details-grid">
+      {([["surname", "Фамилия", 25], ["name", "Имя", 15], ["patronymic", "Отчество", 15], ["birthDate", "Дата рождения", 8], ["birthPlace", "Место рождения", 45], ["residence", "Место жительства и (или) место пребывания", 70]] as const).map(([key, label, max]) => <Field key={key} label={label} path={`${path}.${key}`} value={value[key]} change={val => set(key, val)} errors={errors} maxLength={max} placeholder={key === "birthDate" ? "дд.мм.гг" : undefined}/>)}
+      <SelectField label="Гражданство" path={`${path}.citizenship`} value={value.citizenship} change={val => change({ ...value, citizenship: val, personalNumber: val === "BY" ? value.personalNumber : "" })} errors={errors} items={countries} searchable/>
+      <SelectField label="Наименование документа, удостоверяющего личность" path={`${path}.documentType`} value={value.documentType} change={val => set("documentType", val)} errors={errors} items={identityDocuments}/>
+      {([["series", "Серия", 10], ["number", "Номер", 15], ["issueDate", "Дата выдачи", 8], ["issuer", "Кем выдан", 35]] as const).map(([key, label, max]) => <Field key={key} label={label} path={`${path}.${key}`} value={value[key]} change={val => set(key, val)} errors={errors} maxLength={max} placeholder={key === "issueDate" ? "дд.мм.гг" : undefined}/>)}
+      {value.citizenship === "BY" && <Field label="Личный номер резидента" path={`${path}.personalNumber`} value={value.personalNumber} change={val => set("personalNumber", val.toUpperCase())} errors={errors} maxLength={14}/>}
+      {shares && <Field label={relatedSwitch ? "Доля в уставном капитале организации" : "Доля в уставном фонде"} path={`${path}.share`} value={value.share} change={val => set("share", val)} errors={errors} maxLength={8} placeholder="0,0000"/>}
+    </div>
+    {relatedLabel && (relatedSwitch ? <label className="check-label detail-question"><input type="checkbox" role="switch" checked={value.related === "yes"} onChange={event => set("related", event.target.checked ? "yes" : "no")}/><span>{relatedLabel}</span></label> : <YesNo label={relatedLabel} path={`${path}.related`} value={value.related} change={val => set("related", val)} errors={errors}/>)}
+  </>;
+}
+function AddressFields({ value, change, errors }: { value: Address; change: (address: Address) => void; errors: Errors }) {
+  const [search, setSearch] = useState(false);
+  const [query, setQuery] = useState({ region: "", district: "", name: "" });
+  const [results, setResults] = useState<typeof settlements | null>(null);
+  const [chosen, setChosen] = useState("");
+  const [message, setMessage] = useState("");
+  const apply = (code: string) => { const entry = settlements.find(s => s.code === code); change({ ...value, soato: code, region: entry?.region || "", district: entry?.district || "", council: entry?.council || "", settlementType: entry?.type || "", settlement: entry?.name || "" }); };
+  const normalize = (text: string) => text.trim().toLocaleLowerCase().replace(/ё/g, "е");
+  function find() {
+    setChosen(""); setResults(null);
+    if (!Object.values(query).some(v => v.trim())) { setMessage('Заполните как минимум поле "Наименование населенного пункта"!'); return; }
+    const found = settlements.filter(s => normalize(s.region).startsWith(normalize(query.region)) && normalize(s.district).startsWith(normalize(query.district)) && normalize(s.name).startsWith(normalize(query.name)));
+    if (found.length > 10) { setMessage("Найдено слишком много совпадений, уточните данные: заполните Область, Район, Город!"); return; }
+    setMessage(found.length ? 'Выберите населенный пункт из найденных совпадений и нажмите кнопку "Выбрать"' : "Проверьте корректность данных: Область, Район, Сельсовет, Тип и Название населенного пункта"); setResults(found);
+  }
+  return <section className="questionnaire-panel" aria-labelledby="address-heading"><h2 id="address-heading">Место нахождения</h2><p className="section-description">Введите Код СОАТО или нажмите "Поиск населенного пункта".</p>
+    <div className="soato-row"><Field label="Код СОАТО" path="details.address.soato" value={value.soato} change={apply} errors={errors} maxLength={10} numeric/><button className="button secondary" type="button" onClick={() => { setSearch(true); setMessage(""); setResults(null); setChosen(""); }}>Поиск населенного пункта</button></div>
+    <div className="details-grid">{([["region", "Область"], ["district", "Район"], ["council", "Сельсовет"], ["settlementType", "Тип населенного пункта"], ["settlement", "Название населенного пункта"]] as const).map(([key, label]) => <Field key={key} label={label} path={`details.address.${key}`} value={value[key]} errors={errors} readOnly/>)}
+      <SelectField label="Тип улицы" path="details.address.streetType" value={value.streetType} change={streetType => change({ ...value, streetType })} errors={errors} items={[{code:"ул.",name:"улица"},{code:"пр-т",name:"проспект"},{code:"пер.",name:"переулок"},{code:"пл.",name:"площадь"},{code:"б-р",name:"бульвар"},{code:"ш.",name:"шоссе"}]}/>
+      {([["street", "Название улицы", 35], ["house", "Номер дома", 6], ["building", "Корпус", 3], ["office", "Номер квартиры / офиса", 7], ["other", "Прочее (цоколь, этаж, помещение и т.д.)", 35]] as const).map(([key, label, max]) => <Field key={key} label={label} path={`details.address.${key}`} value={value[key]} change={val => change({ ...value, [key]: val })} errors={errors} maxLength={max} numeric={key === "house"}/>)}</div>
+    {search && <dialog className="modal settlement-modal" aria-label="Поиск населенного пункта" ref={el => { if (el && !el.open) el.showModal(); }} onCancel={() => setSearch(false)}>
+      <div className="modal-title"><h2>Поиск населенного пункта</h2><button type="button" className="text-button" onClick={() => setSearch(false)}>Отменить</button></div>
+      <div className="details-grid">{([["region", "Область"], ["district", "Район"], ["name", "Название населенного пункта"]] as const).map(([key, label]) => <Field key={key} label={label} path={`search.${key}`} value={query[key]} change={val => setQuery({ ...query, [key]: val })} errors={{}}/>)}</div>
+      <button type="button" className="button secondary" onClick={find}>Найти</button>{message && <p className="section-description" role="status">{message}</p>}
+      {results && <div className="settlement-results">{results.map(s => <label className="check-label" key={s.code}><input type="radio" name="settlement" checked={chosen === s.code} onChange={() => setChosen(s.code)}/><span>{[s.region,s.district,s.type,s.name].filter(Boolean).join(", ")}</span></label>)}</div>}
+      <button type="button" className="button primary modal-confirm" disabled={!chosen} onClick={() => { apply(chosen); setSearch(false); }}>Выбрать</button>
+    </dialog>}
+  </section>;
+}
+export default function ApplicationDetails({ value, change, sole, errors }: { value: Details; change: (details: Details) => void; sole: Answer; errors: Errors }) {
+  const collection = (key: "founders" | "beneficiaries", title: string, relatedLabel: string) => <section className="questionnaire-panel"><h2>{title}</h2>{value[key].map((person, i) => <div className="person-section" key={i}><div className="person-section-heading"><h3>{key === "founders" ? "Учредитель" : "Бенефициарный владелец"} {i + 1}</h3>{value[key].length > 1 && <button className="text-button" type="button" onClick={() => change({ ...value, [key]: value[key].filter((_, index) => index !== i) })}><Trash2 size={18}/>Удалить</button>}</div><PersonFields value={person} change={updated => change({ ...value, [key]: value[key].map((p, index) => index === i ? updated : p) })} path={`details.${key}.${i}`} errors={errors} shares relatedLabel={relatedLabel} relatedSwitch={key === "beneficiaries"}/></div>)}<button className="text-button add-person" type="button" disabled={value[key].length >= 30} onClick={() => change({ ...value, [key]: [...value[key], emptyPerson()] })}><Plus size={18}/>Добавить</button></section>;
+  return <>
+    <AddressFields value={value.address} change={address => change({ ...value, address })} errors={errors}/>
+    <section className="questionnaire-panel"><h2>Данные о руководителе (ином лице, уполномоченном в соответствии с учредительными документами действовать от имени организации):</h2><PersonFields value={value.leader} change={leader => change({ ...value, leader })} path="details.leader" errors={errors}/></section>
+    <section className="questionnaire-panel"><h2>Лицо, ведущее бухгалтерский учет</h2><div className="accountant-choices">{[{ value: "director", label: "директор" }, { value: "outsourced", label: "организация/ИП, оказывающие услуги по ведению бухгалтерского учета и составлению отчетности" }, { value: "accountant", label: "главный бухгалтер / бухгалтер" }].map(item => <label className="check-label" key={item.value}><input type="radio" name="accountant-type" checked={value.accountantType === item.value} onChange={() => change({ ...value, accountantType: item.value, accountant: emptyPerson() })}/><span>{item.label}</span></label>)}</div>
+      {value.accountantType === "accountant" && <div className="person-section"><h3>Данные главного бухгалтера / бухгалтера:</h3><PersonFields value={value.accountant} change={accountant => change({ ...value, accountant })} path="details.accountant" errors={errors}/><label className="check-label detail-question"><input type="checkbox" checked={value.accountant.authorized} onChange={e => change({ ...value, accountant: { ...value.accountant, authorized: e.target.checked } })}/><span>Гл.бухгалтер наделен правом действовать от имени организации, являясь учредителем (участником) других организаций с долей в уставном фонде более 25 процентов, или собственником других организаций.</span></label><label className="check-label detail-question"><input type="checkbox" checked={value.accountant.related === "yes"} onChange={e => change({ ...value, accountant: { ...value.accountant, related: e.target.checked ? "yes" : "no" } })}/><span>Гл.бухгалтер имеет долю в уставном фонде более 25% / является учредителем (участником) других организаций с долей в уставном фонде более 25 процентов / является собственником или руководителем других организаций</span></label></div>}
+    </section>
+    {sole === "no" && collection("founders", "Сведения об учредителях - физических лицах:", "Данный учредитель имеет долю в уставном фонде более 25% / является учредителем (участником) других организаций с долей в уставном фонде более 25 процентов / является собственником или руководителем других организаций")}
+    <section className="questionnaire-panel"><YesNo label="Есть ли кроме учредителей бенефициарные владельцы?" path="details.otherBeneficiaries" value={value.otherBeneficiaries} change={otherBeneficiaries => change({ ...value, otherBeneficiaries, beneficiaries: otherBeneficiaries === "yes" ? value.beneficiaries : [emptyPerson()] })} errors={errors}/></section>
+    {value.otherBeneficiaries === "yes" && collection("beneficiaries", "Сведения о бенефициарных владельцах - физических лицах:", "Бенефициар имеет долю в уставном фонде более 25% / является учредителем (участником) других организаций с долей в уставном фонде более 25 процентов / является собственником или руководителем других организаций.")}
+  </>;
+}

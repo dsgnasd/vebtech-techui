@@ -17,9 +17,9 @@ export const signingCopy = {
 };
 
 type DocumentItem = { name: string; url: string; type: string };
-type Props = { files: File[]; applicationLines: string[]; back: () => void };
+type Props = { files: File[]; applicationLines: string[]; back: () => void; onSubmitted?: () => boolean };
 
-export default function SigningFlow({ files, applicationLines, back }: Props) {
+export default function SigningFlow({ files, applicationLines, back, onSubmitted }: Props) {
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
   const [documentError, setDocumentError] = useState(false);
   const [generation, setGeneration] = useState(0);
@@ -69,6 +69,7 @@ export default function SigningFlow({ files, applicationLines, back }: Props) {
     // Demo verification only. No SMS gateway, digital signature or bank request.
     verifyTimer.current = setTimeout(() => {
       busy.current = false; setVerifying(false);
+      if (onSubmitted?.() === false) return;
       setStage("checking");
     }, 650);
   }
@@ -82,7 +83,7 @@ export default function SigningFlow({ files, applicationLines, back }: Props) {
       {stage === "documents" && <>
         <div className="signing-documents" aria-label="Документы">
           <h2>Документы</h2>
-          {!documents.length && !documentError && <div className="signing-document-loading" role="status"><LoaderCircle className="spinning" size={20}/>Подготовка документов...</div>}
+          {!documents.length && !documentError && <div className="signing-document-loading" role="status"><LoaderCircle className="spinning" size={20}/>Формируются документы</div>}
           {documents.map((item,index) => <div className="signing-document" key={`${index}-${item.name}`}><FileText className="signing-file-icon" size={24}/><button className="document-open" type="button" onClick={() => setPreview(item)}>{item.name}</button><a className="icon-button" href={item.url} download={item.name} aria-label={`Скачать ${item.name}`}><Download size={20}/></a></div>)}
         </div>
         {documentError && <div role="alert" className="signing-document-error"><p className="error">Не удалось подготовить документы</p><button type="button" className="text-button" onClick={() => setGeneration(value => value + 1)}>Попробовать ещё раз</button></div>}
