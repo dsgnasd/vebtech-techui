@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { ArrowLeft, Check, ChevronDown, LoaderCircle, Plus, Search, Trash2, Upload, X } from "lucide-react";
 import content from "./source-content.json";
 import copy from "./source-copy.json";
+import SigningFlow from "./signing-flow";
 
 export type Applicant = { kind: "ip" | "company"; unp: string; phone: string };
 type Answer = "yes" | "no" | "";
@@ -171,15 +172,21 @@ export default function Questionnaire({ applicant, back, restart, active = true 
     }
   }
 
-  if (receipt) return <main id={active ? "main" : undefined} className="questionnaire submission-state" aria-live="polite">
-    <section className="success-card">
-      <div className="success-mark"><Check size={30} strokeWidth={2}/></div>
-      <div className="processing-status"><span/>В обработке</div>
-      <h1 ref={top} tabIndex={-1}>Заявление принято в обработку</h1>
-      <p className="success-description">Заявление успешно зарегистрировано!</p>
-      <button type="button" className="button secondary" onClick={restart || back}>Новое заявление</button>
-    </section>
-  </main>;
+  const applicationLines = useMemo(() => [
+    "Заявление на комплексное обслуживание",
+    clientName, `УНП ${applicant.unp}`, `Номер мобильного телефона: ${applicant.phone}`,
+    ...(company ? [`Руководитель юридического лица является единственным участником: ${sole === "yes" ? "Да" : "Нет"}`, `Юридическое лицо действует на основании типового устава: ${charter === "yes" ? "Да" : "Нет"}`] : []),
+    `Основной вид деятельности: ${activityItem?.code || ""} ${activityItem?.name || ""}`,
+    `Прошу открыть текущий счет: ${accounts.join(", ")}`,
+    `Пакеты услуг: ${packageItem?.title || ""}`,
+    `Подключить зарплатный проект: ${selectedPayroll.enabled === "yes" ? "Да" : "Нет"}`,
+    ...(selectedPayroll.currencies.length ? [`Валюта: ${selectedPayroll.currencies.join(", ")}`] : []),
+    `Сервисный офис для обслуживания: ${office?.address || officeId}`,
+    ...files.map(file => file.name),
+    `${copy.at[0]}www.belveb.by):`, ...copy.at.slice(1,8), company ? copy.at[8] : copy.at[9],
+  ], [clientName, applicant.unp, applicant.phone, company, sole, charter, activityItem, accounts, packageItem, selectedPayroll, office, officeId, files]);
+
+  if (receipt) return <SigningFlow files={files} applicationLines={applicationLines} back={() => { setReceipt(null); scrollTop(); }}/>;
 
   return <main id={active ? "main" : undefined} className="questionnaire">
     <div className="questionnaire-heading"><button type="button" className="icon-button" disabled={submitting} onClick={back} aria-label="Открытие счета"><ArrowLeft size={22}/></button><h1 ref={top} tabIndex={-1}>Заявление на комплексное обслуживание</h1></div>

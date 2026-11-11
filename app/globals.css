@@ -1,6 +1,6 @@
 @font-face {
   font-family: Manrope;
-  src: url('/assets/manrope.woff2') format('woff2');
+  src: url('/assets/manrope.ttf') format('truetype');
   font-weight: 200 800;
   font-display: swap;
 }
@@ -577,3 +577,53 @@ form[aria-busy="true"] .submission-fields { opacity: .7; }
   .questionnaire-panel { padding: 16px; margin-bottom: 8px; }
   .questionnaire-heading h1 { font-size: var(--solar-h3-size); line-height: var(--solar-h3-line); }
 }
+
+/* Signing continues the same Solar Medium controls and compact rhythm. */
+.signing-flow { width: min(100%, 960px); margin: 24px auto; }
+.signing-back { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; min-height: 32px; }
+.signing-card { padding: 28px; background: #fff; border: 1px solid var(--divider); border-radius: 20px; animation: signing-enter .2s ease-out; }
+.signing-card h1 { font-size: var(--solar-h3-size); line-height: var(--solar-h3-line); font-weight: 700; }
+.signing-description { color: var(--muted); font-size: var(--solar-body1-size); line-height: var(--solar-body1-line); margin-top: 8px; }
+.signing-documents { margin-top: 24px; border: 1px solid var(--border); border-radius: 12px; }
+.signing-documents h2 { padding: 12px 16px; font-size: var(--solar-body2-size); line-height: var(--solar-body2-line); color: var(--muted); font-weight: 500; background: var(--background); border-radius: 12px 12px 0 0; }
+.signing-document { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-top: 1px solid var(--divider); min-height: 64px; }
+.signing-file-icon { color: var(--primary); flex-shrink: 0; }
+.document-open { flex: 1; min-width: 0; text-align: left; background: transparent; color: var(--text); overflow-wrap: anywhere; line-height: 20px; padding: 4px 0; }
+.document-open:hover { color: #1c62fa; text-decoration: underline; text-underline-offset: 3px; }
+.signing-document .icon-button { display: inline-flex; justify-content: center; align-items: center; flex-shrink: 0; color: var(--muted); width: 36px; height: 36px; border-radius: 8px; }
+.signing-document .icon-button:hover { background: #3b79ff0d; color: #1c62fa; }
+.signing-document-loading { display: flex; align-items: center; gap: 8px; padding: 20px 16px; color: var(--muted); }
+.signing-action { display: flex; align-items: center; justify-content: center; gap: 8px; width: fit-content; min-width: 224px; margin: 24px auto 0; min-height: 48px; }
+.signing-document-error { display: grid; gap: 8px; margin-top: 12px; justify-items: start; }
+.signing-sms, .signing-checking, .signing-complete { max-width: 624px; }
+.signing-sms .signing-card, .signing-checking .signing-card, .signing-complete .signing-card { text-align: center; }
+.signing-sms-form { max-width: 400px; margin: 24px auto 0; }
+.signing-sms-form .field { text-align: left; margin-bottom: 12px; }
+.signing-sms-form input { font-variant-numeric: tabular-nums; }
+.signing-resend { min-height: 40px; line-height: 20px; font-variant-numeric: tabular-nums; }
+.signing-resend:disabled { color: #a2a6b8; cursor: default; }
+.signing-sms-form .signing-action { margin-top: 16px; }
+.signing-checking, .signing-complete { margin-top: clamp(24px, 9vh, 96px); }
+.signing-success-mark { display: grid; place-items: center; margin: 0 auto 24px; width: 64px; height: 64px; border-radius: 50%; background: #00ba3433; color: #00952a; }
+.signing-checking .signing-checking { margin: 24px auto 0; color: var(--primary); }
+.signing-bank-link { text-decoration: none; }
+.signing-preview { width: min(960px, calc(100vw - 32px)); max-width: 960px; }
+.signing-preview .modal-title h2 { overflow-wrap: anywhere; }
+.document-preview-content { display: block; width: 100%; height: min(60vh, 640px); border: 1px solid var(--divider); border-radius: 8px; margin-top: 16px; }
+.document-preview-image { display: block; max-width: 100%; max-height: 60vh; object-fit: contain; margin: 16px auto; }
+.document-preview-fallback { padding: 24px 0; color: var(--muted); }
+.signing-download { display: flex; align-items: center; justify-content: center; gap: 8px; width: fit-content; margin: 16px 0 0 auto; text-decoration: none; }
+@keyframes signing-enter { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@media (max-width: 600px) {
+  .signing-flow { margin-top: 0; }
+  .signing-card { padding: 20px 16px; border-radius: 16px; }
+  .signing-back { margin-bottom: 12px; }
+  .signing-document { gap: 8px; padding: 10px 12px; }
+  .signing-action { width: 100%; min-width: 0; }
+  .signing-sms .signing-card { text-align: left; }
+  .signing-resend { display: block; text-align: center; width: 100%; }
+  .signing-preview { padding: 16px; }
+}
+.spinning { animation: signing-spin 1s linear infinite; }
+@keyframes signing-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .signing-card, .spinning { animation: none; } }
