@@ -64,12 +64,11 @@ export default function SigningFlow({ files, applicationLines, back }: Props) {
   function confirm(event: React.FormEvent) {
     event.preventDefault();
     if (busy.current) return;
-    if (code.length !== 6) { setError("Введите код из 6 цифр"); input.current?.focus(); return; }
+    if (!/^\d{6}$/.test(code)) { setError("Введите код из 6 цифр"); input.current?.focus(); return; }
     busy.current = true; setVerifying(true); setError("");
     // Demo verification only. No SMS gateway, digital signature or bank request.
     verifyTimer.current = setTimeout(() => {
       busy.current = false; setVerifying(false);
-      if (code !== "123456") { setError("Неверный код. Проверьте код и попробуйте ещё раз"); input.current?.focus(); return; }
       setStage("checking");
     }, 650);
   }
