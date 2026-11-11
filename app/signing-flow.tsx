@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { ArrowLeft, ArrowUpRight, Check, Download, FileText, LoaderCircle, X } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Check, Download, FileText, LoaderCircle, X } from "./solar-icons";
 import { createApplicationPdf } from "./application-pdf";
 
 export type SigningStage = "documents" | "sms" | "checking" | "complete";

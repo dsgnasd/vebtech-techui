@@ -1,0 +1,143 @@
+{
+  "source": "https://www.figma.com/design/XvjAEoJqExd4XwTu5Nby0P/Solar-1.0?node-id=1-7299",
+  "variant": "linear",
+  "icons": {
+    "ArrowLeft": {
+      "nodeId": "1:15444",
+      "componentKey": "7ce0c7fd7c1aa7b66f030a4c6dc4e6be1e177cf6",
+      "file": "ArrowLeft.svg"
+    },
+    "ArrowUpRight": {
+      "nodeId": "1:13430",
+      "componentKey": "a3f2f35fffd99b764f4fe82c73905251d926a553",
+      "file": "ArrowUpRight.svg"
+    },
+    "Check": {
+      "nodeId": "161:17087",
+      "componentKey": "d0ce4ecee15e96addcdf66390dcc56f586ef2415",
+      "file": "Check.svg"
+    },
+    "ChevronDown": {
+      "nodeId": "156:25759",
+      "componentKey": "bb19cd6d202b337f433433fff2375168091365ee",
+      "file": "ChevronDown.svg"
+    },
+    "X": {
+      "nodeId": "1:34159",
+      "componentKey": "a1c5c9e87fd14d1658d3532596fca6895e683afe",
+      "file": "X.svg"
+    },
+    "Plus": {
+      "nodeId": "1:33422",
+      "componentKey": "a3ff37a4332c28aafbfa528cb9c19caaa3e00270",
+      "file": "Plus.svg"
+    },
+    "Info": {
+      "nodeId": "370:24400",
+      "componentKey": "b32f14dabb91a5464c4998ce0b7b667968dc5713",
+      "file": "Info.svg"
+    },
+    "Search": {
+      "nodeId": "1:25473",
+      "componentKey": "edd51e315f5ace96fd752922b8fe150be8d34d54",
+      "file": "Search.svg"
+    },
+    "Trash2": {
+      "nodeId": "1:32689",
+      "componentKey": "fe3bd40ceb16d0e6eef32454b8085f6a3a8d30e3",
+      "file": "Trash2.svg"
+    },
+    "Upload": {
+      "nodeId": "1:41801",
+      "componentKey": "2b79b36926cba363e7c73da77fbf8d13543cccdf",
+      "file": "Upload.svg"
+    },
+    "Download": {
+      "nodeId": "1:41850",
+      "componentKey": "80ba3e949620626ea799b800b2d6c2577b471731",
+      "file": "Download.svg"
+    },
+    "FileText": {
+      "nodeId": "1:41170",
+      "componentKey": "c51c6af5e0130071548aeed5aad7850d8552efae",
+      "file": "FileText.svg"
+    },
+    "LoaderCircle": {
+      "nodeId": "1:13391",
+      "componentKey": "2dba68e189665801ded90f999e3991544a038a0e",
+      "file": "LoaderCircle.svg"
+    },
+    "User": {
+      "nodeId": "1:16713",
+      "componentKey": "fd2ffb936c35378d08ea391fda3ed52d36ed2493",
+      "file": "User.svg"
+    },
+    "Briefcase": {
+      "nodeId": "1:46598",
+      "componentKey": "8ece2f2b0129cf6cd78a6dc0f7fcd4791efdad63",
+      "file": "Briefcase.svg"
+    }
+  },
+  "publishedComponents": {
+    "ArrowLeft": {
+      "key": "7ce0c7fd7c1aa7b66f030a4c6dc4e6be1e177cf6",
+      "name": "Property 1=linear"
+    },
+    "ArrowUpRight": {
+      "key": "a3f2f35fffd99b764f4fe82c73905251d926a553",
+      "name": "Property 1=linear"
+    },
+    "Check": {
+      "key": "d0ce4ecee15e96addcdf66390dcc56f586ef2415",
+      "name": "24/check"
+    },
+    "ChevronDown": {
+      "key": "bb19cd6d202b337f433433fff2375168091365ee",
+      "name": "24/arrow down"
+    },
+    "X": {
+      "key": "a1c5c9e87fd14d1658d3532596fca6895e683afe",
+      "name": "Property 1=linier"
+    },
+    "Plus": {
+      "key": "a3ff37a4332c28aafbfa528cb9c19caaa3e00270",
+      "name": "Property 1=linear"
+    },
+    "Info": {
+      "key": "b32f14dabb91a5464c4998ce0b7b667968dc5713",
+      "name": "Property 1=linear"
+    },
+    "Search": {
+      "key": "edd51e315f5ace96fd752922b8fe150be8d34d54",
+      "name": "Property 1=linear"
+    },
+    "Trash2": {
+      "key": "fe3bd40ceb16d0e6eef32454b8085f6a3a8d30e3",
+      "name": "Property 1=linear"
+    },
+    "Upload": {
+      "key": "0d98d23a3449af8fea5da67e5108b16a002c28c6",
+      "name": "document-upload/linear"
+    },
+    "Download": {
+      "key": "80ba3e949620626ea799b800b2d6c2577b471731",
+      "name": "Property 1=linear"
+    },
+    "FileText": {
+      "key": "c51c6af5e0130071548aeed5aad7850d8552efae",
+      "name": "Property 1=linear"
+    },
+    "LoaderCircle": {
+      "key": "2dba68e189665801ded90f999e3991544a038a0e",
+      "name": "Property 1=linear"
+    },
+    "User": {
+      "key": "6ef7c17205c625ad530745f5a70ea93a4651ac4d",
+      "name": "user/linear"
+    },
+    "Briefcase": {
+      "key": "8ece2f2b0129cf6cd78a6dc0f7fcd4791efdad63",
+      "name": "Property 1=linear"
+    }
+  }
+}

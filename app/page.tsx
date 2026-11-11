@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Info } from "lucide-react";
+import { Info, User, Briefcase } from "./solar-icons";
 import Questionnaire, { ErrorText, Modal } from "./questionnaire";
 import content from "./source-content.json";
 import copy from "./source-copy.json";
@@ -61,8 +61,8 @@ export default function Home() {
         <div className="card-heading"><h1>Открытие счета</h1><p>Укажите ваши данные</p></div>
         <form ref={form} onSubmit={submit} noValidate>
           <fieldset className="applicants"><legend className="visually-hidden">Выберите тип заявителя</legend><div className="choice-grid">
-            <label className={`applicant ${kind === "ip" ? "selected" : ""}`}><input type="radio" name="kind" value="ip" checked={kind === "ip"} onChange={() => changeKind("ip")} aria-invalid={!!errors.kind} aria-describedby={errors.kind ? "kind-error" : undefined}/><img className="applicant-icon" src="/assets/figma-user.svg" alt="" width="24" height="24"/><strong>{content.entrepreneurDescription}</strong></label>
-            <label className={`applicant ${company ? "selected" : ""}`}><input type="radio" name="kind" value="company" checked={company} onChange={() => changeKind("company")} aria-invalid={!!errors.kind}/><img className="applicant-icon" src="/assets/figma-briefcase.svg" alt="" width="24" height="24"/><strong>{content.companyDescription}</strong></label>
+            <label className={`applicant ${kind === "ip" ? "selected" : ""}`}><input type="radio" name="kind" value="ip" checked={kind === "ip"} onChange={() => changeKind("ip")} aria-invalid={!!errors.kind} aria-describedby={errors.kind ? "kind-error" : undefined}/><User className="applicant-icon" size={24}/><strong>{content.entrepreneurDescription}</strong></label>
+            <label className={`applicant ${company ? "selected" : ""}`}><input type="radio" name="kind" value="company" checked={company} onChange={() => changeKind("company")} aria-invalid={!!errors.kind}/><Briefcase className="applicant-icon" size={24}/><strong>{content.companyDescription}</strong></label>
           </div><ErrorText id="kind-error">{errors.kind}</ErrorText></fieldset>
           {kind && <div className="fields-area">
             <div className="field"><label htmlFor="unp">{company ? "УНП юридического лица" : "УНП индивидуального предпринимателя"}</label><input id="unp" type="text" inputMode="numeric" autoComplete="off" maxLength={9} placeholder="ХХХХХХХХХ" value={unp} onChange={event => { setUnp(event.target.value.replace(/\D/g, "")); clear("unp"); }} aria-invalid={!!errors.unp} aria-describedby={errors.unp ? "unp-error" : undefined}/><ErrorText id="unp-error">{errors.unp}</ErrorText></div>
